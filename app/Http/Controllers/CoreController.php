@@ -14,7 +14,7 @@ class CoreController extends Controller
     public function index()
     {
         $cores  = Core::all();
-        return view("cores.index", compact($cores));
+        return view("cores.index", compact('cores'));
     }
 
     /**
