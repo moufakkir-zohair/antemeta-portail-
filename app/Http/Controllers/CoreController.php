@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use App\Models\Core;
 
 class CoreController extends Controller
 {
@@ -13,7 +13,8 @@ class CoreController extends Controller
      */
     public function index()
     {
-        //
+        $cores  = Core::all();
+        return view("cores.index", compact($cores));
     }
 
     /**
