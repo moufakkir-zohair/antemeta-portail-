@@ -13,6 +13,6 @@ use App\Http\Controllers\CoreController;
 |
 */
 
-Route::resource('Core',CoreController::class)->except('show');
+Route::resource('Cores',CoreController::class)->except('show');
 
 Route::get('/', [CoreController::class, 'index']);
