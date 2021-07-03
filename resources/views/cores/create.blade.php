@@ -5,19 +5,19 @@
            @csrf
             <div class="form-group">
                 <label>Name</label>
-                <input type="text" class="form-control" name="core_name" placeholder="Name" required/>
+                <input type="text" class="form-control" name="core_name" placeholder="Name"/>
             </div>
             <div class="form-group">
               <label>Username</label>
-              <input type="text" class="form-control" name="core_username" placeholder="Username" required>
+              <input type="text" class="form-control" name="core_username" placeholder="Username">
             </div>
             <div class="form-group">
               <label>Url</label>
-              <input type="url" class="form-control" name="core_url" placeholder="https://....." required>
+              <input type="url" class="form-control" name="core_url" placeholder="https://.....">
             </div>
             <div class="form-group">
               <label>password</label>
-              <input type="text" class="form-control" name="password" placeholder="********" >
+              <input type="text" class="form-control" name="password" placeholder="********">
             </div>
             <button  class="btn btn-block btn-primary" type="submit"> Add core</button>
     </form>
