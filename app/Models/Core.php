@@ -7,5 +7,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Core extends Model
 {
-    use HasFactory;
+    protected $fillable = ['core_name','core_url','core_username','core_passhash'];
 }
