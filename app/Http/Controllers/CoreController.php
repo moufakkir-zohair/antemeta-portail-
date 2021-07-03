@@ -24,7 +24,7 @@ class CoreController extends Controller
      */
     public function create()
     {
-        //
+        return view("cores.create");
     }
 
     /**
