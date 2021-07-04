@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCore;
+use App\Http\Requests\StroreCoreRequest;
 use Illuminate\Http\Request;
 use App\Models\Core;
 
@@ -35,7 +36,7 @@ class CoreController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(StoreCore $request)
+    public function store(StroreCoreRequest $request)
     {
         $data = $request->only(['core_name','core_url','core_username']);
         $data['core_passhash']=$request->get('password');
