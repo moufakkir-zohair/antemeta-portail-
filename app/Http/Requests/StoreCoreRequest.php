@@ -23,10 +23,10 @@ class StoreCore extends FormRequest
     public function rules()
     {
         return [
-            'core_name'=>'required',
+            'core_name'=>'required|min:5|max:255',
             'core_url'=>'required',
-            'core_username'=>'required',
-            'password'=>'required'
+            'core_username'=>'required|unique:cores|min:5|max:255',
+            'core_passhash'=>'required'
         ];
     }
 }
