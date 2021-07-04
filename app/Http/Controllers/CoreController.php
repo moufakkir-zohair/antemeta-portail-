@@ -6,6 +6,7 @@ use App\Http\Requests\StoreCore;
 use App\Http\Requests\StroreCoreRequest;
 use Illuminate\Http\Request;
 use App\Models\Core;
+use Illuminate\Support\Facades\Hash;
 
 class CoreController extends Controller
 {
@@ -38,10 +39,14 @@ class CoreController extends Controller
      */
     public function store(StroreCoreRequest $request)
     {
-        $data = $request->only(['core_name','core_url','core_username']);
-        $data['core_passhash']=$request->get('password');
-        Core::create($data);
-        return redirect()->route("Cores.index");
+        Core::create([
+            'core_name' => $request->get('core_name'),
+            'core_url' => $request->get('core_url'),
+            'core_username' => $request->get('core_username'),
+            'core_passhash' => Hash::make($request->get('core_passhash')),
+        ]);
+        flash(sprintf("core %s is added successfully",$request->get('core_username')),'primary');
+        return redirect()->route("cores.index");
     }
 
     /**
