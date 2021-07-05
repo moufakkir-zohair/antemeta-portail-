@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreCore;
 use App\Http\Requests\StroreCoreRequest;
+use App\Http\Requests\UpdateCoreRequest;
 use Illuminate\Http\Request;
 use App\Models\Core;
 use Illuminate\Support\Facades\Hash;
@@ -34,19 +35,21 @@ class CoreController extends Controller
         return redirect()->route("cores.index");
     }
 
-    public function show($id)
-    {
-        //
-    }
-
     public function edit(Core $core)
     {
         return view('cores.edit',compact('core'));
     }
 
-    public function update(Request $request, $id)
+    public function update(UpdateCoreRequest $request, Core $core)
     {
-        //
+        $core->update([
+            'core_name' => $request->get('core_name'),
+            'core_username' => $request->get('core_username'),
+            'core_url' => $request->get('core_url'),
+            'core_passhash' =>  Hash::make($request->get('password')),
+        ]);
+        flash(sprintf("core %s is updated successfully",$core->core_username),'success');
+        return redirect()->route("cores.index");
     }
 
     public function destroy($id)
