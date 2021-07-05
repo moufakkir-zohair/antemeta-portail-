@@ -52,8 +52,10 @@ class CoreController extends Controller
         return redirect()->route("cores.index");
     }
 
-    public function destroy($id)
+    public function destroy(Core $core)
     {
-        //
+        $core->delete();
+        flash(sprintf("core %s is deleted successfully ",$core->core_username),'danger',$core->id);
+        return redirect()->route("cores.index");
     }
 }
