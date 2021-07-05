@@ -58,4 +58,11 @@ class CoreController extends Controller
         flash(sprintf("core %s is deleted successfully ",$core->core_username),'danger',$core->id);
         return redirect()->route("cores.index");
     }
+    
+    public function restore(int $id)
+    {
+       Core::onlyTrashed()->find($id)->restore();
+       flash("core is restore successfully",'warning');
+       return redirect()->route("cores.index");
+    }
 }
