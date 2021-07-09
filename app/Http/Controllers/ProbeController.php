@@ -92,7 +92,7 @@ class ProbeController extends Controller
                 }
                 $this->ReinitialiserProbes();
             }
-            Log::channel('info')->info("UPDATE_PROBES : probes probes are updated ");   
+            Log::channel('info')->info("UPDATE_PROBES : probes probes are updated ".$core->core_name);   
         }catch(Exception $e){
             Log::error($e->getMessage());
         }

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreCoreRequest;
 use App\Http\Requests\UpdateCoreRequest;
 use App\Models\Core;
+use App\Models\HistoryCore;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
@@ -97,6 +98,33 @@ class CoreController extends Controller
             flash("core is restore successfully",'warning');
             Log::channel('info')->info("RESTORE_CORE : user xxx restore the core ".$id);
             return redirect()->route("cores.index");
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+        }
+    }
+
+    public function historyCore(){
+        try{
+            $cores = Core::all();
+            foreach($cores as $core ){
+                $probes = file_get_contents($core->core_url.'api/gettreenodestats.xml?username='.$core->core_username.'&passhash='.$core->core_passhash);
+                $xml = simplexml_load_string($probes, 'SimpleXMLElement', LIBXML_NOCDATA);
+                $json = json_encode($xml);
+                $array = json_decode($json,TRUE);
+                HistoryCore::create([
+                    'core_id' => $core->id ,
+                    'prtg-version'=> $array['prtg-version'] ,
+                    'totalsens'=> $array['totalsens'] ,
+                    'upsens'=> $array['upsens'] ,
+                    'downsens'=> $array['downsens'] ,
+                    'warnsens'=> $array['warnsens'] ,
+                    'downacksens'=> $array['downacksens'] ,
+                    'partialdownsens'=> $array['partialdownsens'] ,
+                    'unusualsens'=> $array['unusualsens'] ,
+                    'pausedsens'=> $array['pausedsens'] ,
+                    'undefinedsens'=> $array['undefinedsens'] ,
+                ]);
+            }
         }catch(Exception $e){
             Log::error($e->getMessage());
         }
