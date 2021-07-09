@@ -22,28 +22,16 @@ class ProbeController extends Controller
         }
     }
 
-    // update or create function 
-
     public function UpdateProbes($probesAPI = [] , Core $core=null){
         foreach($probesAPI as $probe){
-            $probeByid = Probe::where('core_id', $core->id)->where('objid', $probe['objid'])->first();
-            if($probeByid){
-                   $probeByid->update([
-                       'core_id' => $core->id,
-                       'objid' => $probe['objid'],
-                       'name' => $probe['name'],
-                       'status' => $probe['condition'],
-                       'changed' => true,
-                   ]);
-            }else{
-               Probe::create([
-                   'core_id' => $core->id,
-                   'objid' => $probe['objid'],
-                   'name' => $probe['name'],
-                   'status' => $probe['condition'],
-                   'changed' => true,
-                   ]); 
-            }
+            Probe::updateOrCreate([
+                'core_id' => $core->id,
+                'objid' => $probe['objid'],
+            ],[
+                'name' => $probe['name'],
+                'status' => $probe['condition'],
+                'changed' => true,
+            ]);
        }
     }
 
@@ -99,16 +87,4 @@ class ProbeController extends Controller
         
     }
 
-
-
-    public function Core_History (){
-        $cores = Core::all();
-        foreach($cores as $core ){
-            $probes = file_get_contents($core->core_url.'api/gettreenodestats.xml?username='.$core->core_username.'&passhash='.$core->core_passhash);
-            $xml = simplexml_load_string($probes, 'SimpleXMLElement', LIBXML_NOCDATA);
-            $json = json_encode($xml);
-            $array = json_decode($json,TRUE);
-            echo $json;
-        }
-    }
 }
