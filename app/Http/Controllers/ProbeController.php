@@ -75,21 +75,26 @@ class ProbeController extends Controller
     }
 
     public function index()
-    {   
-        $cores = Core::all();
-        if($cores->count()){
-            $probesDB = Probe::all();
-            $this->AddHistoryProbes($probesDB);
-            foreach($cores as $core ){
-                $probesAPI = Http::get($core->core_url.'api/table.json?columns=objid,name,condition&filter_type=probenode&username='.$core->core_username.'&passhash='.$core->core_passhash)->json()[""];
-                if($probesDB->count()){
-                    $this->UpdateProbes($probesAPI,$core);
-                }else{
-                    $this->CreateProbes($probesAPI,$core);
+    {   try{
+            $cores = Core::all();
+            if($cores->count()){
+                $probesDB = Probe::all();
+                $this->AddHistoryProbes($probesDB);
+                foreach($cores as $core ){
+                    $probesAPI = Http::get($core->core_url.'api/table.json?columns=objid,name,condition&filter_type=probenode&username='.$core->core_username.'&passhash='.$core->core_passhash)->json()[""];
+                    if($probesDB->count()){
+                        $this->UpdateProbes($probesAPI,$core);
+                    }else{
+                        $this->CreateProbes($probesAPI,$core);
+                    }
                 }
+                $this->ReinitialiserProbes();
             }
-            $this->ReinitialiserProbes();
-        }   
+            Log::info("les probes sont mises a jour");   
+        }catch(Exception $e){
+            Log::error($e->getMessage());
+        }
+        
     }
 
 
