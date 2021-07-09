@@ -23,9 +23,9 @@ class StoreCoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'core_name'=>'required|min:5|max:255',
+            'core_name'=>'required',
             'core_url'=>'required',
-            'core_username'=>'required|unique:cores|min:5|max:255',
+            'core_username'=>'required',
             'core_passhash'=>'required'
         ];
     }

@@ -32,8 +32,8 @@
             </span>
             </div>
             <div class="form-group">
-              <label>New password</label>
-              <input type="password" class="form-control @error('core_passhash') is-invalid  @enderror"  name="core_passhash" placeholder="********" value="{{ old('core_passhash')}}">
+              <label>password</label>
+              <input type="text" class="form-control @error('core_passhash') is-invalid  @enderror"  name="core_passhash" placeholder="********" value="{{ old('core_passhash',$core->core_passhash)}}">
               <span style="color: red">
                 @error('core_passhash')
                     {{$message}}

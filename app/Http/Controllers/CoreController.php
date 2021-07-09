@@ -41,7 +41,7 @@ class CoreController extends Controller
                 'core_name' => $request->get('core_name'),
                 'core_url' => $request->get('core_url'),
                 'core_username' => $request->get('core_username'),
-                'core_passhash' => Hash::make($request->get('core_passhash')),
+                'core_passhash' =>$request->get('core_passhash'),
             ]);
             flash(sprintf("core %s is added successfully",$request->get('core_username')),'primary');
             Log::info("l'utilisateur xxxx exécute l'action store de Core");
@@ -61,7 +61,7 @@ class CoreController extends Controller
         }
     }
 
-    public function update(UpdateCoreRequest $request, Core $core)
+    public function update(StoreCoreRequest $request, Core $core)
     {
         try{
             $core->update([
