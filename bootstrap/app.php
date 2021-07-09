@@ -52,4 +52,6 @@ $app->singleton(
 |
 */
 
+$app->register(\Rap2hpoutre\LaravelLogViewer\LaravelLogViewerServiceProvider::class);
+
 return $app;

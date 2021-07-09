@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreCore;
-use App\Http\Requests\StroreCoreRequest;
+use App\Http\Requests\StoreCoreRequest;
 use App\Http\Requests\UpdateCoreRequest;
-use Illuminate\Http\Request;
 use App\Models\Core;
 use Illuminate\Support\Facades\Hash;
 
@@ -23,7 +21,7 @@ class CoreController extends Controller
         return view("cores.create");
     }
 
-    public function store(StroreCoreRequest $request)
+    public function store(StoreCoreRequest $request)
     {
         Core::create([
             'core_name' => $request->get('core_name'),
@@ -58,7 +56,7 @@ class CoreController extends Controller
         flash(sprintf("core %s is deleted successfully ",$core->core_username),'danger',$core->id);
         return redirect()->route("cores.index");
     }
-    
+
     public function restore(int $id)
     {
        Core::onlyTrashed()->find($id)->restore();
