@@ -13,14 +13,16 @@ class ProbeController extends Controller
     public function CreateProbes($probesAPI = [] , Core $core=null){
         foreach($probesAPI as $probe){
             Probe::create([
-            'core_id' => $core->id,
-            'objid' => $probe['objid'],
-            'name' => $probe['name'],
-            'status' => $probe['condition'],
-            'changed' => true
+                'core_id' => $core->id,
+                'objid' => $probe['objid'],
+                'name' => $probe['name'],
+                'status' => $probe['condition'],
+                'changed' => true
             ]);
         }
     }
+
+    // update or create function 
 
     public function UpdateProbes($probesAPI = [] , Core $core=null){
         foreach($probesAPI as $probe){
@@ -49,14 +51,13 @@ class ProbeController extends Controller
     public function ReinitialiserProbes(){
         $probesDB = Probe::all(); 
         foreach($probesDB as $probe){
-            echo $probe->changed;
-            if($probe->changed==1){
+            if($probe->changed){
                 $probe->update([
                     'changed' => false,
                 ]);
             }else{
                 $probe->update([
-                    'status' => 'Disabled',
+                    'status' => 'Deleted',
                     'changed' => false,
                 ]);
             }
@@ -66,16 +67,17 @@ class ProbeController extends Controller
     public function AddHistoryProbes($probesDB=[]){
         foreach($probesDB as $probe){
             HistoryProbe::create([
-            'core_id' => $probe->core_id,
-            'objid' => $probe->objid,
-            'name' => $probe->name,
-            'status' => $probe->status,
+                'core_id' => $probe->core_id,
+                'objid' => $probe->objid,
+                'name' => $probe->name,
+                'status' => $probe->status,
             ]);
         }
     }
 
     public function index()
-    {   try{
+    {   
+        try{
             $cores = Core::all();
             if($cores->count()){
                 $probesDB = Probe::all();
@@ -90,7 +92,7 @@ class ProbeController extends Controller
                 }
                 $this->ReinitialiserProbes();
             }
-            Log::info("les probes sont mises a jour");   
+            Log::channel('info')->info("UPDATE_PROBES : probes probes are updated ");   
         }catch(Exception $e){
             Log::error($e->getMessage());
         }
