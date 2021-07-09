@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Probe extends Model
 {
     use HasFactory;
+    protected $fillable = ['core_id','objid','name','status','changed'];
+
 }
