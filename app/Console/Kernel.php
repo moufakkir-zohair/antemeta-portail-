@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         commands\UpdateProbes::class,
+        commands\AddhistoryCore::class,
     ];
 
     /**
@@ -25,6 +26,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('update:probes')->everyMinute();
+        $schedule->command('AddHistory:cores')->everyMinute();
     }
 
     /**
