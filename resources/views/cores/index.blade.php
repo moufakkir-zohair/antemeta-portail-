@@ -27,26 +27,27 @@
                           </thead>
                           <tbody>
 
-                            @foreach ($cores as $core)
+                          @foreach ($cores as $core)
                             <tr>
                                 <td>{{$core->core_name}}</td>
                                 <td>{{$core->core_url}}</td>
                                 <td>{{$core->core_username}}</td>
                                 <td>{{$core->created_at->format('d/m/Y')}}</td>
                                 <td> 
-
                                   <span class="actionCust">
                                     <a href="{{route('cores.edit',['core'=>$core])}}"><i class="fa fa-pencil-square-o"></i></a>
                                   </span>
                                   <span class="actionCust">
-                                    <a href="" data-toggle="modal" data-target="#deletemodel" ><i class="fa  fa-trash"></i></a>
+                                    <a href="" data-toggle="modal" data-target="#deletemodel{{$core->id}}" ><i class="fa  fa-trash"></i></a>
                                   </span>
                                   <span class="actionCust">
-                                    <a href="" data-toggle="modal" data-target="#showmodel"><i class="fa  fa-eye"></i></a>
+                                    <a href="" data-toggle="modal" data-target="#showmodel{{$core->id}}"><i class="fa  fa-info-circle"></i></a>
                                   </span>
                                 </td>
 
-                                <div class="modal fade" id="deletemodel" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
+
+
+                                <div class="modal fade" id="deletemodel{{$core->id}}" tabindex="-1" role="dialog" aria-labelledby="delete" aria-hidden="true">
                                   <div class="modal-dialog" role="document">
                                     <form action="{{ route('cores.destroy',['core'=>$core])}}" method="POST">
                                       @csrf
@@ -67,27 +68,38 @@
                                   </div>
                                 </div>
 
-                                <div class="modal fade" id="showmodel" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="show" aria-hidden="true">
-                                  <div class="modal-dialog">
-                                    <div class="modal-content">
-                                      <div class="modal-header">
-                                        <h5 class="modal-title">Detail of core</h5>
-                                        <button aria-hidden="true" data-dismiss="modal" class="close"
-                                          type="button">×</button>
-                                      </div>
-                                      <div class="modal-body">
-                                        <h5>core name : {{$core->core_name}}</h5> 
-                                        <h5> username : {{$core->core_username}}</h5> 
-                                        <h5> url : {{$core->core_url}}</h5> 
-                                        <h5> date : {{$core->created_at->format('d/m/Y')}}</h5> 
-                                      </div>
-                                      <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                              
+                                <div class="modal fade" id="showmodel{{$core->id}}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="show" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                      <div class="modal-content">
+                                        <div class="modal-header">
+                                          <h5 class="modal-title">Detail of core</h5>
+                                          <button aria-hidden="true" data-dismiss="modal" class="close"
+                                            type="button">×</button>
+                                        </div>
+                                        <div class="modal-body">
+                                          <?php 
+                                          $probes = file_get_contents($core->core_url.'api/gettreenodestats.xml?username='.$core->core_username.'&passhash='.$core->core_passhash);
+                                          $xml = simplexml_load_string($probes, 'SimpleXMLElement', LIBXML_NOCDATA);
+                                          $json = json_encode($xml);
+                                          $array = json_decode($json,TRUE);
+                                          ?>
+                                          <h5>total sensor : {{$array['totalsens']}}</h5> 
+                                          <h5>up sensor : {{$array['upsens']}}</h5> 
+                                          <h5> down sensor : {{$array['downsens']}}</h5> 
+                                          <h5> warning sensor : {{$array['warnsens']}}</h5> 
+                                          <h5> downack sensor : {{$array['downacksens']}}</h5> 
+                                          <h5> partial down sensor : {{$array['partialdownsens']}}</h5> 
+                                          <h5> unusual sensor : {{$array['unusualsens']}}</h5> 
+                                          <h5> paused sensor : {{$array['pausedsens']}}</h5> 
+                                          <h5> undefined sensor: {{$array['undefinedsens']}}</h5> 
+                                        </div>
+                                        <div class="modal-footer">
+                                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Ok</button>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
                                 </div> 
-
                             </tr>
                           @endforeach
                           </tbody>
@@ -113,6 +125,12 @@
           dataTable.search(this.value).draw();
         });
       });
+
+      $('#deletemodel').on('show.bs.modal', function(event) {
+			var button = $(event.relatedTarget)
+			var modal = $(this)
+		  })
+
 
         $('#deletemodel').on('show.bs.modal',function(event){
             var button = $(event.relatedTarget)
