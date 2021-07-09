@@ -16,8 +16,8 @@ class CoreController extends Controller
     {
         try{
              $cores  = Core::all();
+             Log::channel('info')->info("DISPLAY_CORES : user xxx display the list of cores");
              return view("cores.index", compact('cores'));
-             Log::info("l'utilisateur xxxx exécute l'action index de Core");
         }catch(Exception $e){
             Log::error($e->getMessage());
         }
@@ -26,7 +26,7 @@ class CoreController extends Controller
     public function create()
     {
         try{
-            Log::info("l'utilisateur xxxx exécute l'action create de Core");
+            Log::channel('info')->info("CREATE_CORE : user xxx ask to create core");
             return view("cores.create");
         }catch(Exception $e){
             Log::error($e->getMessage());
@@ -44,7 +44,7 @@ class CoreController extends Controller
                 'core_passhash' =>$request->get('core_passhash'),
             ]);
             flash(sprintf("core %s is added successfully",$request->get('core_username')),'primary');
-            Log::info("l'utilisateur xxxx exécute l'action store de Core");
+            Log::channel('info')->info("STRORE_CORE : user xxx store the core ".$request->get('core_name'));
             return redirect()->route("cores.index");
         }catch(Exception $e){
             Log::error($e->getMessage());
@@ -54,7 +54,7 @@ class CoreController extends Controller
     public function edit(Core $core)
     {
         try{
-            Log::info("l'utilisateur xxxx exécute l'action edit de Core");
+            Log::channel('info')->info("EDIT_CORE : user xxx ask to edit the core ".$core->core_name);
             return view('cores.edit',compact('core'));
         }catch(Exception $e){
             Log::error($e->getMessage());
@@ -68,10 +68,10 @@ class CoreController extends Controller
                 'core_name' => $request->get('core_name'),
                 'core_username' => $request->get('core_username'),
                 'core_url' => $request->get('core_url'),
-                'core_passhash' =>  Hash::make($request->get('password')),
+                'core_passhash' => $request->get('core_passhash'),
             ]);
             flash(sprintf("core %s is updated successfully",$core->core_username),'success');
-            Log::info("l'utilisateur xxxx exécute l'action update de Core");
+            Log::channel('info')->info("UPDATE_CORE : user xxx update the core ".$core->core_name);
             return redirect()->route("cores.index");
         }catch(Exception $e){
             Log::error($e->getMessage());
@@ -83,7 +83,7 @@ class CoreController extends Controller
         try{
             $core->delete();
             flash(sprintf("core %s is deleted successfully ",$core->core_username),'danger',$core->id);
-            Log::info("l'utilisateur xxxx exécute l'action destroy de Core");
+            Log::channel('info')->info("DESTROY_CORE : user xxx destroy the core ".$core->core_name);
             return redirect()->route("cores.index");
         }catch(Exception $e){
             Log::error($e->getMessage());
@@ -95,7 +95,7 @@ class CoreController extends Controller
         try{
             Core::onlyTrashed()->find($id)->restore();
             flash("core is restore successfully",'warning');
-            Log::info("l'utilisateur xxxx exécute l'action restore de Core");
+            Log::channel('info')->info("RESTORE_CORE : user xxx restore the core ".$id);
             return redirect()->route("cores.index");
         }catch(Exception $e){
             Log::error($e->getMessage());
